@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>时钟</title>
+	<style>
+		#canvas{
+			border: 1px solid black;
+			position: absolute;
+			margin: auto;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			background: #918986;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="400" height="300"></canvas>
+</body>
+<script>
+	var canvas=document.querySelector('#canvas');
+	var ctx=canvas.getContext('2d');
+
+	// // 创建新 image 对象，用作图案
+	// var img = new Image();
+	// img.src = 'image/watch.jpg';
+	// img.onload = function(){
+
+ //    // 创建图案
+ //    var ptrn = ctx.createPattern(img,'repeat');
+ //    ctx.fillStyle = ptrn;
+ //    ctx.beginPath();
+ //    ctx.fillRect(0,0,400,300);
+ //    ctx.stroke();
+ //    ctx.closePath();
+
+ //    }
+
+    var r=function(e){
+	    return(Math.PI/180)*e;
+    }
+
+    var draw = function(){
+
+    	var now = new Date();
+ 	    ctx.clearRect(0,0,400,300)
+
+
+    	// 表盘
+
+    	ctx.save();
+    	ctx.translate(200,150);
+        
+        ctx.save();
+    	ctx.beginPath();
+    	ctx.fillStyle ="#fff";
+    	ctx.shadowOffsetX = -1;
+    	ctx.shadowOffsetY = 7;
+    	ctx.shadowBlur = 0.5;
+    	ctx.shadowColor="#3d3435";
+    	ctx.arc(0,0,100,0, r(360));
+    	ctx.fill();
+    	ctx.closePath();
+    	ctx.restore();
+
+    	// 圆心
+
+        ctx.save();
+    	ctx.beginPath();
+    	ctx.fillStyle ="#afaba5";
+    	ctx.moveTo(5,0);
+    	ctx.arc(0,0,5,0,r(360));
+    	ctx.fill();
+    	ctx.closePath();
+    	ctx.restore();
+
+
+
+    	// 数字
+    	ctx.save();
+    	ctx.beginPath();
+    	ctx.font = "20px serif";
+    	ctx.strokeText("12", -10, -80);
+    	ctx.strokeText("3", 85, 5);
+    	ctx.strokeText("6", -5, 95);
+    	ctx.strokeText("9", -95, 5);
+
+    	ctx.stroke();
+    	ctx.closePath();
+    	ctx.restore();
+
+
+    	// 秒针
+
+    	var second = now.getSeconds();
+
+    	var s = 360*(second/60);
+
+    	ctx.save();
+    	ctx.rotate(r(s))
+    	ctx.beginPath();
+    	ctx.strokeStyle = "#FF2A00";
+    	ctx.moveTo(0,30);
+    	ctx.lineTo(0,5);
+    	ctx.moveTo(0,-5);
+    	ctx.lineTo(0,-80);
+    	ctx.lineWidth = 2;
+    	
+    	ctx.stroke();
+    	ctx.closePath();
+    	ctx.restore();
+
+
+    	// 分针
+
+    	var minute = now.getMinutes();
+        var f = 360*(minute*60 +second)/3400;
+
+    	ctx.save();
+    	ctx.rotate(r(f));
+    	ctx.beginPath();
+    	ctx.strokeStyle = "#68645b";
+    	ctx.lineCap="round";
+    	ctx.moveTo(0,20);
+    	ctx.lineTo(0,5);
+    	ctx.moveTo(0,-5);
+    	ctx.lineTo(0,-60);
+    	ctx.lineWidth = 5;
+    	ctx.stroke();
+    	ctx.closePath();
+    	ctx.restore();
+
+    	// 时针
+
+    	var hours = now.getHours();
+        var h = 360*( hours*3600 + minute*60 + second)/43200;
+
+
+    	ctx.save();
+    	ctx.rotate(r(h));
+    	ctx.beginPath();
+    	ctx.strokeStyle = "#68645b";
+    	ctx.lineCap="round";
+    	ctx.moveTo(0,20);
+    	ctx.lineTo(0,5);
+    	ctx.moveTo(0,-5);
+    	ctx.lineTo(0,-35);
+    	ctx.lineWidth = 5;
+    	ctx.stroke();
+    	ctx.closePath();
+    	ctx.restore();
+
+        ctx.restore();
+
+    }
+
+    draw();
+    setInterval(draw,1000);
+
+
+
+
+
+
+
+
+</script>
+</html>
